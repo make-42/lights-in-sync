@@ -39,7 +39,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .header("X-API-Key", api_key)
         .send()
         .await?
-        .error_for_status()?   // turn HTTP errors into Rust errors
+        // .error_for_status()?   // turn HTTP errors into Rust errors
         .json()
         .await.unwrap_or(DbStatus { state: String::from("") });
 
@@ -60,7 +60,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .header("X-API-Key", api_key)
         .send()
         .await?
-        .error_for_status()?   // turn HTTP errors into Rust errors
+        // .error_for_status()?   // turn HTTP errors into Rust errors
         .json()
         .await.unwrap_or(DbCompletion { global_bytes: 0, need_bytes: 0 })
     };
@@ -68,10 +68,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     folder.status = status.state.clone();
 
-    if status.state == "idle" || status.state == "scanning" {
+    if status.state == "idle" || status.state == "scanning" || status.state == "paused"{
         folder.global_bytes_at_sync_start = completion.global_bytes;
-        folder.progress = 1.;
-    } else if status.state == "paused" {
         folder.progress = 1.;
     } else {
         out_of_sync = true;
@@ -109,6 +107,9 @@ if global_bytes_at_sync_end-global_bytes_at_sync_start > 0{
     let out = out_strings.join(" ");
     println!("{}",out);
 
-    thread::sleep(time::Duration::from_millis(1000));
+    if out_of_sync{
+    thread::sleep(time::Duration::from_millis(config.dynamic_refresh_millis));} else {
+    thread::sleep(time::Duration::from_millis(config.refresh_millis));
+    }
 }
 }

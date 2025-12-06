@@ -16,6 +16,10 @@ scanning_color = "#FFFF00"
 error_color = "#FF0000"
 paused_color = "#BBBBBB"
 
+# Refresh period / dynamic refresh period
+refresh_millis = 2000
+dynamic_refresh_millis = 500
+
 # Folder list
 [[folders]]
 id = "xxxxx-xxxxx"

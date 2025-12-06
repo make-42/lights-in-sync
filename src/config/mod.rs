@@ -8,7 +8,9 @@ pub struct Config {
     pub idle_color: String,
     pub scanning_color: String,
     pub error_color: String,
-    pub paused_color: String
+    pub paused_color: String,
+    pub refresh_millis: u64,
+    pub dynamic_refresh_millis: u64,
 }
 
 #[derive(Debug, Deserialize, Clone)]
