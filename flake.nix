@@ -14,7 +14,7 @@
   in {
     packages.${system}.default = pkgs.rustPlatform.buildRustPackage rec {
       pname = "lights-in-sync";
-      version = "1-unstable-2025-12-06";
+      version = "0-unstable-2025-12-06-0";
 
       src = pkgs.fetchFromGitHub {
         owner = "make-42";
