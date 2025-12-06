@@ -19,8 +19,8 @@
       src = pkgs.fetchFromGitHub {
         owner = "make-42";
         repo = "lights-in-sync";
-        rev = "425e5c07e0a1b4e4fe5f777c358c5149891a41b6";
-        hash = "sha256-A1h/NPmQ25q5CaV5CYemCpuiciD2KBacRwKcQMfpE84=";
+        rev = "5f44130336c4919487bf61faf507c039e2210488";
+        hash = "sha256-67LIMt7a/1Sv4dB3N7JqTzK2CtHmdwIKkMIX5tHDeI8=";
       };
 
       cargoHash = "sha256-bwdwGLuNlzKKXs2nc0ApGXtDZMD0U9ny+QQGQ4ybSOM=";
