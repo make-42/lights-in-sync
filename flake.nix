@@ -19,11 +19,11 @@
       src = pkgs.fetchFromGitHub {
         owner = "make-42";
         repo = "lights-in-sync";
-        rev = "71bf691b23107b548f794caad1cd5e6e487d49be";
-        hash = "sha256-EYJDp1en7fRg6o21b7dmp4QPaWWssy6JUd8WJVaNJh8=";
+        rev = "11fbae8c562974bbb1f82aed1fec5b1170a8ad59";
+        hash = "sha256-7E+Oaa/DXwR9zxQqeOwhfdDeMvoIc/O3GkXio5Kwnpg=";
       };
 
-      cargoHash = "sha256-XXXX";
+      cargoHash = "";
 
       meta = {
         description = "Blinkenlights for Syncthing";
