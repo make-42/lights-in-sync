@@ -3,7 +3,7 @@ mod folder;
 mod utils;
 mod config;
 
-use reqwest::Client;
+use reqwest::{Client};
 use comms::{DbStatus,DbCompletion};
 
 use config::load_config;
@@ -34,14 +34,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         folder.name
     );
 
-    let mut status: DbStatus = client
+    let status_res = client
         .get(url)
         .header("X-API-Key", api_key)
         .send()
-        .await?
-        // .error_for_status()?   // turn HTTP errors into Rust errors
-        .json()
-        .await.unwrap_or(DbStatus { state: String::from(""),in_sync_bytes:0 });
+        .await;
+    let mut status = match status_res {
+        Err(_) => DbStatus { state: String::from(""),in_sync_bytes:0 },
+        Ok(res) => res.json()
+        .await.unwrap_or(DbStatus { state: String::from(""),in_sync_bytes:0 })
+    };
 
     let url = format!(
         "http://localhost:8384/rest/db/completion?folder={}",
@@ -55,14 +57,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let completion = if status.state == "paused"{
         DbCompletion { global_bytes: 0, need_bytes: 0 }
     } else {
+        let completion_res = 
     client
         .get(url)
         .header("X-API-Key", api_key)
         .send()
-        .await?
-        // .error_for_status()?   // turn HTTP errors into Rust errors
-        .json()
+        .await;
+    match completion_res {
+        Err(_) => {
+            DbCompletion { global_bytes: 0, need_bytes: 0 }
+        },
+        Ok(res) => res.json()
         .await.unwrap_or(DbCompletion { global_bytes: 0, need_bytes: 0 })
+    }
     };
 
 
