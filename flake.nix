@@ -23,7 +23,7 @@
         hash = "sha256-EYJDp1en7fRg6o21b7dmp4QPaWWssy6JUd8WJVaNJh8=";
       };
 
-      cargoHash = "sha256-+A5JK0SAhLf1g4wwPNH5j2wqZWXHqU9kwE6ddtG0q7k=";
+      cargoHash = "sha256-XXXX";
 
       meta = {
         description = "Blinkenlights for Syncthing";
