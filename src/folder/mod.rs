@@ -1,7 +1,7 @@
 pub struct Folder {
     pub name: String,
     pub symbol: String,
-    pub global_bytes_at_sync_start: u64,
+    pub global_bytes_at_sync_start: i64,
     pub progress: f64,
     pub status: String,
 }

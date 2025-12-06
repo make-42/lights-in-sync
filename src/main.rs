@@ -21,9 +21,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     loop {
         let mut out_of_sync = false;
-        let mut global_bytes_at_sync_start: u64 = 0;
-        let mut global_bytes_current: u64 = 0;
-        let mut global_bytes_at_sync_end: u64 = 0;
+        let mut global_bytes_at_sync_start: i64 = 0;
+        let mut global_bytes_current: i64 = 0;
+        let mut global_bytes_at_sync_end: i64 = 0;
         let mut progress: f64 = 1.; // 0 -> 1
     for folder in &mut folders_list {
     let client = Client::new();
@@ -41,7 +41,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .await?
         // .error_for_status()?   // turn HTTP errors into Rust errors
         .json()
-        .await.unwrap_or(DbStatus { state: String::from("") });
+        .await.unwrap_or(DbStatus { state: String::from(""),in_sync_bytes:0 });
 
     let url = format!(
         "http://localhost:8384/rest/db/completion?folder={}",
@@ -69,21 +69,21 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     folder.status = status.state.clone();
 
     if status.state == "idle" || status.state == "scanning" || status.state == "paused"{
-        folder.global_bytes_at_sync_start = completion.global_bytes;
+        folder.global_bytes_at_sync_start = completion.global_bytes-completion.need_bytes;
         folder.progress = 1.;
     } else {
         out_of_sync = true;
         let folder_global_bytes_at_sync_start = folder.global_bytes_at_sync_start;
-    let folder_global_bytes_current = completion.global_bytes;
-    let folder_global_bytes_at_sync_end = completion.global_bytes+completion.need_bytes;
+    let folder_global_bytes_current = status.in_sync_bytes;
+    let folder_global_bytes_at_sync_end = completion.global_bytes;
     if folder_global_bytes_at_sync_end-folder_global_bytes_at_sync_start > 0{
         folder.progress = (folder_global_bytes_current as f64 -folder_global_bytes_at_sync_start as f64)/(folder_global_bytes_at_sync_end as f64-folder_global_bytes_at_sync_start as f64)
     }
     }
 
     global_bytes_at_sync_start += folder.global_bytes_at_sync_start;
-    global_bytes_current += completion.global_bytes;
-    global_bytes_at_sync_end += completion.global_bytes+completion.need_bytes;
+    global_bytes_current += status.in_sync_bytes;
+    global_bytes_at_sync_end += completion.global_bytes;
 }
 if global_bytes_at_sync_end-global_bytes_at_sync_start > 0{
     progress = (global_bytes_current as f64 -global_bytes_at_sync_start as f64)/(global_bytes_at_sync_end as f64-global_bytes_at_sync_start as f64)
