@@ -1,4 +1,6 @@
 # Lights in Sync
+<img width="106" height="37" alt="image" src="https://github.com/user-attachments/assets/bcc4bf5b-adb2-4382-a3b1-f2ea2884cc03" />
+
 A topbar program for getting and displaying Syncthing folder statuses.
 
 
